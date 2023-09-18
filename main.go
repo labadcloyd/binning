@@ -63,14 +63,15 @@ func equalFrequency(bins int) []dataStruct {
 		if len(finalData[i].data) == length && i+1 < bins {
 			finalData[i].max = finalData[i].data[len(finalData[i].data)-1]
 			i += 1
+			finalData[i].min = finalData[i-1].data[len(finalData[i-1].data)-1] + 1
+		}
+		if len(finalData[i].data) >= length && i+2 > bins {
+			finalData[i].data = append(finalData[i].data, item)
+			finalData[i].max = finalData[i].data[len(finalData[i].data)-1]
+			continue
 		}
 		if len(finalData[i].data) <= length {
 			finalData[i].data = append(finalData[i].data, item)
-			continue
-		}
-		if i+1 > bins {
-			finalData[i].data = append(finalData[i].data, item)
-			log.Println(finalData[i])
 			finalData[i].max = finalData[i].data[len(finalData[i].data)-1]
 			continue
 		}
