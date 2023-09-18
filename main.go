@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"log"
+	"math"
 	"os"
 )
 
@@ -13,10 +14,11 @@ type dataStruct struct {
 }
 
 func main() {
-	equalWidth(3)
+	// equalWidth(3)
+	equalFrequency(3)
 }
 
-func equalWidth(bins int) {
+func equalWidth(bins int) []dataStruct {
 	data := readAndSort()
 	max := data[len(data)-1]
 	min := data[0]
@@ -47,7 +49,35 @@ func equalWidth(bins int) {
 			}
 		}
 	}
+	return finalData
+}
+func equalFrequency(bins int) []dataStruct {
+	data := readAndSort()
+	lengthFlt := float32(len(data)) / float32(bins)
+	length := int(math.Floor(float64(lengthFlt)))
+
+	i := 0
+	finalData := make([]dataStruct, bins)
+
+	for _, item := range data {
+		if len(finalData[i].data) == length && i+1 < bins {
+			finalData[i].max = finalData[i].data[len(finalData[i].data)-1]
+			i += 1
+		}
+		if len(finalData[i].data) <= length {
+			finalData[i].data = append(finalData[i].data, item)
+			continue
+		}
+		if i+1 > bins {
+			finalData[i].data = append(finalData[i].data, item)
+			log.Println(finalData[i])
+			finalData[i].max = finalData[i].data[len(finalData[i].data)-1]
+			continue
+		}
+	}
+
 	log.Println(finalData)
+	return finalData
 }
 
 // READ AND SORT
