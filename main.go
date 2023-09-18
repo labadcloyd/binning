@@ -6,13 +6,48 @@ import (
 	"os"
 )
 
-func main() {
-	equalWidth()
+type dataStruct struct {
+	min  int
+	max  int
+	data []int
 }
 
-func equalWidth() {
+func main() {
+	equalWidth(3)
+}
+
+func equalWidth(bins int) {
 	data := readAndSort()
-	log.Println(data)
+	max := data[len(data)-1]
+	min := data[0]
+
+	w := ((max - min) / bins)
+
+	finalData := make([]dataStruct, bins)
+
+	wCount := 0
+	for i := 0; i < bins; i++ {
+		finalData[i].min = wCount + 1
+		if i == 0 {
+			finalData[i].min = wCount
+		}
+		finalData[i].max = wCount + w
+		wCount = wCount + w
+	}
+	for i, itemFinal := range finalData {
+		for _, item := range data {
+			if itemFinal.min > item {
+				continue
+			}
+			if itemFinal.max >= item {
+				finalData[i].data = append(finalData[i].data, item)
+			}
+			if itemFinal.max < item {
+				break
+			}
+		}
+	}
+	log.Println(finalData)
 }
 
 // READ AND SORT
@@ -58,7 +93,6 @@ func quicksort(arr []int, low int, high int) {
 		quicksort(arr, pivotIndex+1, high)
 	}
 }
-
 func partition(arr []int, low int, high int) int {
 	pivot := arr[high]
 	i := low - 1
