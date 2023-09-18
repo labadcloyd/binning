@@ -21,6 +21,8 @@ func main() {
 	// log.Println(data)
 	// smoothingMedian(data)
 	// log.Println(data)
+	smoothingBounderies(data)
+	log.Println(data)
 }
 
 func equalWidth(bins int) []dataStruct {
@@ -92,16 +94,29 @@ func smoothingMeans(data []dataStruct) {
 			total += item
 		}
 		means = total / len(slice.data)
-		for k, _ := range slice.data {
+		for k := range slice.data {
 			data[i].data[k] = means
 		}
 	}
 }
 func smoothingMedian(data []dataStruct) {
 	for i, slice := range data {
-		for k, _ := range slice.data {
+		for k := range slice.data {
 			index := int(math.Floor(float64(len(slice.data) / 2)))
 			data[i].data[k] = slice.data[int(index)]
+		}
+	}
+}
+func smoothingBounderies(data []dataStruct) {
+	for i, slice := range data {
+		for k := range slice.data {
+			index := int(math.Floor(float64(len(slice.data) / 2)))
+			if k <= index {
+				data[i].data[k] = slice.data[0]
+			}
+			if k > index {
+				data[i].data[k] = slice.data[len(slice.data)-1]
+			}
 		}
 	}
 }
