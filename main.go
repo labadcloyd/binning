@@ -15,7 +15,12 @@ type dataStruct struct {
 
 func main() {
 	// equalWidth(3)
-	equalFrequency(3)
+	data := equalFrequency(3)
+	log.Println(data)
+	// smoothingMeans(data)
+	// log.Println(data)
+	// smoothingMedian(data)
+	// log.Println(data)
 }
 
 func equalWidth(bins int) []dataStruct {
@@ -77,8 +82,28 @@ func equalFrequency(bins int) []dataStruct {
 		}
 	}
 
-	log.Println(finalData)
 	return finalData
+}
+func smoothingMeans(data []dataStruct) {
+	for i, slice := range data {
+		total := 0
+		means := 0
+		for _, item := range slice.data {
+			total += item
+		}
+		means = total / len(slice.data)
+		for k, _ := range slice.data {
+			data[i].data[k] = means
+		}
+	}
+}
+func smoothingMedian(data []dataStruct) {
+	for i, slice := range data {
+		for k, _ := range slice.data {
+			index := int(math.Floor(float64(len(slice.data) / 2)))
+			data[i].data[k] = slice.data[int(index)]
+		}
+	}
 }
 
 // READ AND SORT
